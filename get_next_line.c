@@ -84,16 +84,15 @@ char	*ft_readandstash(int fd, char *buff, char *stash)
 	// if(!buff)
 	// 	buff = ft_strdup("");
 	stash = ft_strjoin(stash, buff);
-	while (/*ft_nlcheck(stash) >= 0 &&*/ read_count > 0)
+	while (read_count > 0)
 	{
 		read_count = read(fd, buff, BUFFER_SIZE);
 		buff[read_count] = 0;
 		stash = ft_strjoin(stash, buff);
-		if (ft_nlcheck(stash) >= 0)
+		if (ft_nlcheck(buff) >= 0)
 			break ;
 	}
-	if (read_count <= 0)
-		free(buff);
+	//printf("buff = (%s)\n", buff);
 	return (stash);
 }
 
@@ -116,6 +115,7 @@ char	*ft_newstash(char *stash)
 	stash_len = ft_strlen(stash);
 	npos = ft_nlcheck(stash);
 	newstr = ft_substr(stash, npos + 1, stash_len - npos);
+	free(stash);
 	return (newstr);
 }
 
@@ -125,10 +125,11 @@ char	*get_next_line(int fd)
 	char		*output;
 	char		*buff;
 
-	
+	//printf("stash = (%s)\n", stash);
 	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 	stash = ft_readandstash(fd, buff, stash);
-	if (fd < 0 || !stash || !buff)
+	free(buff);
+	if (fd < 0 || !stash)
 		return (0);
 	//trim stash into output
 	output = ft_trimstash(stash);
