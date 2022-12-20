@@ -17,6 +17,7 @@ files := get_next_line \
 $(NAME):
 	gcc -c $(FLAGS) get_next_line.c get_next_line_utils.c
 	ar -rcs $(NAME) get_next_line.o get_next_line_utils.o
+	gcc test.c -L. -lgnl
 all: $(NAME)
 clean:
 	rm -f $(files:%=%.o)

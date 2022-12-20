@@ -26,6 +26,75 @@ int	ft_nlcheck(char *s)
 	return (-1);
 }
 
+char	*ft_readandstash(int fd, char *buff, char *stash)
+{
+	int read_count;
+
+	read_count = 1;
+	// if (!stash)
+	// 	stash = ft_strdup("");
+	// if(!buff)
+	// 	buff = ft_strdup("");
+	//stash = ft_strjoin(stash, buff);
+	while (read_count > 0 )
+	{
+		read_count = read(fd, buff, BUFFER_SIZE);
+		buff[read_count] = 0;
+		stash = ft_strjoin(stash, buff);
+		if (ft_nlcheck(buff) >= 0)
+			break ;
+	}
+	//printf("buff = (%s)\n", buff);
+	return (stash);
+}
+
+char	*ft_trimstash(char *stash)
+{
+	int		npos;
+	char	*output;
+
+	npos = ft_nlcheck(stash);
+	output = ft_substr(stash, 0, npos + 1);
+	return (output);
+}
+
+char	*ft_newstash(char *stash)
+{
+	int		stash_len;
+	int		npos;
+	char	*newstr;
+
+	stash_len = ft_strlen(stash);
+	npos = ft_nlcheck(stash);
+	newstr = ft_substr(stash, npos + 1, stash_len - npos);
+	free(stash);
+	return (newstr);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*stash;
+	char		*output;
+	char		buff[BUFFER_SIZE + 1];
+
+	//printf("stash = (%s)\n", stash);
+	//buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	
+
+	stash = ft_readandstash(fd, buff, stash);
+	//free(buff);
+	if (fd < 0 || !stash)
+		return (0);
+	//trim stash into output
+	output = ft_trimstash(stash);
+	if (ft_strlen(output) == 0)
+		return (NULL);
+	//remake stash for next round
+	stash = ft_newstash(stash);
+	return (output);
+	
+}
+
 // char	*get_next_line(int fd)
 // {
 // 	char		*buff;
@@ -73,70 +142,3 @@ int	ft_nlcheck(char *s)
 // 	stash = NULL;
 // 	return (stash2);
 // }
-
-char	*ft_readandstash(int fd, char *buff, char *stash)
-{
-	int read_count;
-
-	read_count = 1;
-	// if (!stash)
-	// 	stash = ft_strdup("");
-	// if(!buff)
-	// 	buff = ft_strdup("");
-	stash = ft_strjoin(stash, buff);
-	while (read_count > 0)
-	{
-		read_count = read(fd, buff, BUFFER_SIZE);
-		buff[read_count] = 0;
-		stash = ft_strjoin(stash, buff);
-		if (ft_nlcheck(buff) >= 0)
-			break ;
-	}
-	//printf("buff = (%s)\n", buff);
-	return (stash);
-}
-
-char	*ft_trimstash(char *stash)
-{
-	int		npos;
-	char	*output;
-
-	npos = ft_nlcheck(stash);
-	output = ft_substr(stash, 0, npos + 1);
-	return (output);
-}
-
-char	*ft_newstash(char *stash)
-{
-	int		stash_len;
-	int		npos;
-	char	*newstr;
-
-	stash_len = ft_strlen(stash);
-	npos = ft_nlcheck(stash);
-	newstr = ft_substr(stash, npos + 1, stash_len - npos);
-	free(stash);
-	return (newstr);
-}
-
-char	*get_next_line(int fd)
-{
-	static char	*stash;
-	char		*output;
-	char		*buff;
-
-	//printf("stash = (%s)\n", stash);
-	buff = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	stash = ft_readandstash(fd, buff, stash);
-	free(buff);
-	if (fd < 0 || !stash)
-		return (0);
-	//trim stash into output
-	output = ft_trimstash(stash);
-	if (ft_strlen(output) == 0)
-		return (NULL);
-	//remake stash for next round
-	stash = ft_newstash(stash);
-	return (output);
-	
-}
