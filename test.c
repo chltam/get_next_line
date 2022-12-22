@@ -28,13 +28,15 @@ int main()
 	while (str)
 	{
 		printf("%s", str);
+		free(str);
 		str = get_next_line(fd);
 		// printf("%s", str2);
 		// str2 = get_next_line(fd2);
 		// printf("%s", str3);
 		// str3 = get_next_line(fd3);
 	}
-	
+	close(fd);
+	free(str);
 	return (0);
 
 }

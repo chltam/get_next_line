@@ -50,23 +50,23 @@ char	*ft_readandstash(int fd, char *buff, char *stash)
 
 char	*ft_trimstash(char *stash)
 {
-	int		npos;
+	int		nlpos;
 	char	*output;
 
-	npos = ft_nlcheck(stash);
-	output = ft_substr(stash, 0, npos + 1);
+	nlpos = ft_nlcheck(stash);
+	output = ft_substr(stash, 0, nlpos + 1);
 	return (output);
 }
 
 char	*ft_newstash(char *stash)
 {
 	int		stash_len;
-	int		npos;
+	int		nlpos;
 	char	*newstr;
 
 	stash_len = ft_strlen(stash);
-	npos = ft_nlcheck(stash);
-	newstr = ft_substr(stash, npos + 1, stash_len - npos);
+	nlpos = ft_nlcheck(stash);
+	newstr = ft_substr(stash, nlpos + 1, stash_len - nlpos);
 	free(stash);
 	return (newstr);
 }
@@ -74,6 +74,7 @@ char	*ft_newstash(char *stash)
 char	*get_next_line(int fd)
 {
 	static char	*stash;
+	// char		*temp;
 	char		*output;
 	char		buff[BUFFER_SIZE + 1];
 
@@ -86,6 +87,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || !stash)
 		return (0);
 	//trim stash into output
+	// temp = ft_strdup(stash);
 	output = ft_trimstash(stash);
 	if (ft_strlen(output) == 0)
 		return (NULL);
