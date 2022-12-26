@@ -78,13 +78,8 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	n = 0;
 	i = 0;
-
-	if (!s1)
-		s1 = ft_strdup("");
 	if (!s1)
 		return (NULL);
-	if (!s2)
-		return (s1);
 	newstr = malloc(sizeof(*newstr) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!newstr)
 		return (NULL);
@@ -100,11 +95,6 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	newstr[n + i] = 0;
 	free(s1);
-	if (newstr[0] == 0)
-	{
-		free(newstr);
-		return (NULL);
-	}
 	return (newstr);
 }
 

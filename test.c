@@ -25,6 +25,7 @@ int main()
 	char *str = get_next_line(fd);
 	// char *str2 = get_next_line(fd2);
 	// char *str3 = get_next_line(fd3);
+	// printf("%s", str);
 	while (str)
 	{
 		printf("%s", str);
